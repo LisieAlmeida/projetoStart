@@ -10,14 +10,24 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Schema(name = "TipoInput", description = "Objeto de entrada para inclusão e alteração da entidade Tipo")
+@Schema(name = "ProductInput", description = "Objeto de entrada para inclusão e alteração da entidade Product")
 @Getter @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class TipoInputDTO {
+public class OrderInputDTO {
+	
+	@NotNull
+	@Length(max = 100)
+	private String name;
 	
 	@NotNull
 	@Length(max = 100)
 	private String descricao;
+	
+	@NotNull
+	private Double price;
+	
+	private String imgUrl;
+	
 	
 }

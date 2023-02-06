@@ -8,28 +8,25 @@ import javax.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.capgemini.start.domain.entity.Tipo;
-import com.capgemini.start.domain.repository.TipoRepository;
+import com.capgemini.start.domain.entity.User;
 import com.capgemini.start.domain.repository.UserRepository;
+
+
 
 @Component
 public class LoadData {
-	
 	@Autowired
-	private TipoRepository tipoRepository;
 	private UserRepository userRepository;
 	
-	private void carregarTipos() {
-		var filmes = new Tipo(null, "Filmes", new Date(), null);
-		var series = new Tipo(null, "Series", new Date(), null);
-		tipoRepository.saveAll(List.of(filmes, series));
+	private void LoadUsers() {
+		var maria = new User(null, "Maria", "maria@maria.com", "123456", new Date(), null);
+		var joao = new User(null, "João", "joao@joao.com", "456789", new Date(), null);
+		userRepository.saveAll(List.of(maria, joao));
 	}
-	
-
 	
 	@PostConstruct
-	public void carregar() {
-		carregarTipos();
+	public void Load() {
+		LoadUsers();
 	}
-
 }
+
