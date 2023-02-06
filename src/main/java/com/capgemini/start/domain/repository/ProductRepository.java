@@ -10,8 +10,9 @@ import com.capgemini.start.domain.entity.Product;
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Long>{
 	
-	boolean existsByDescricaoIgnoreCase(String descricao);
+	boolean existsByNameIgnoreCase(String name);
 	
 	boolean existsByIdNotAndNameIgnoreCase(Long id, String name);
+
 
 }
