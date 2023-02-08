@@ -27,6 +27,7 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @RestController
+@CrossOrigin(origins = "*")
 @RequestMapping(value = "/api/users")
 public class UserResourceImpl implements UserResource{
 	

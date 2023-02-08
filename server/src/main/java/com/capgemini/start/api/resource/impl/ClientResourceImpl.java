@@ -10,52 +10,52 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import com.capgemini.start.api.dto.input.UserInputDTO;
-import com.capgemini.start.api.dto.output.UserDTO;
-import com.capgemini.start.api.mapper.UserMapper;
-import com.capgemini.start.api.resource.UserResource;
-import com.capgemini.start.domain.entity.User;
-import com.capgemini.start.domain.service.UserService;
+import com.capgemini.start.api.dto.input.ClientInputDTO;
+import com.capgemini.start.api.dto.output.ClientDTO;
+import com.capgemini.start.api.mapper.ClientMapper;
+import com.capgemini.start.api.resource.ClientResource;
+import com.capgemini.start.domain.entity.Client;
+import com.capgemini.start.domain.service.ClientService;
+
 
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping(value = "/api/users")
-public class UserResourceImpl implements UserResource{
+@RequestMapping(value = "/api/clients")
+public class ClientResourceImpl implements ClientResource{
 	
-	private final UserService service;
+	private final ClientService service;
 	
 	@Autowired
-	private UserMapper mapper;
+	private ClientMapper mapper;
 	
 	@Override
-	public ResponseEntity<UserDTO> findById(Long id) {
-		User user = this.service.findById(id);
-		UserDTO dto = mapper.toDTO(user);
+	public ResponseEntity<ClientDTO> findById(Long id) {
+		Client client = this.service.findById(id);
+		ClientDTO dto = mapper.toDTO(client);
 		return ResponseEntity.ok(dto);
 	}
 
 	@Override
-	public ResponseEntity<List<UserDTO>> findAll() {
+	public ResponseEntity<List<ClientDTO>> findAll() {
 		return ResponseEntity.ok(
 					this.service.findAll()
 					.stream()
-					.map(user -> mapper.toDTO(user))
+					.map(client -> mapper.toDTO(client))
 					.collect(Collectors.toList())
 				);
 	}
 
 	@Override
-	public ResponseEntity<UserDTO> insert(@RequestBody @Valid UserInputDTO user) {
-		User entity = mapper.toEntity(user);
-		User createdEntity = this.service.insert(entity);
+	public ResponseEntity<ClientDTO> insert(@RequestBody @Valid ClientInputDTO client) {
+		Client entity = mapper.toEntity(client);
+		Client createdEntity = this.service.insert(entity);
 		
 		URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
@@ -68,13 +68,15 @@ public class UserResourceImpl implements UserResource{
 	}
 
 	@Override
-	public ResponseEntity<UserDTO> update(Long id, @Valid UserInputDTO user) {
-		User toUpdate = this.service.findById(id);
-		toUpdate.setName(user.getName());
-		toUpdate.setEmail(user.getEmail());
-		toUpdate.setPassword(user.getPassword());
+	public ResponseEntity<ClientDTO> update(Long id, @Valid ClientInputDTO client) {
+		Client toUpdate = this.service.findById(id);
+		toUpdate.setCpf(client.getCpf());
+		toUpdate.setName(client.getName());
+		toUpdate.setEmail(client.getEmail());
+		toUpdate.setAdress(client.getAdress());
+		toUpdate.setPhone(client.getPhone());
 		
-		User updated = this.service.update(toUpdate);
+		Client updated = this.service.update(toUpdate);
 		return ResponseEntity.ok(mapper.toDTO(updated));
 	}
 

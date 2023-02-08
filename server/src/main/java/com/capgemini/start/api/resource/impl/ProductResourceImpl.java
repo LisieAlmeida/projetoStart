@@ -10,52 +10,51 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import com.capgemini.start.api.dto.input.UserInputDTO;
-import com.capgemini.start.api.dto.output.UserDTO;
-import com.capgemini.start.api.mapper.UserMapper;
-import com.capgemini.start.api.resource.UserResource;
-import com.capgemini.start.domain.entity.User;
-import com.capgemini.start.domain.service.UserService;
+import com.capgemini.start.api.dto.input.ProductInputDTO;
+import com.capgemini.start.api.dto.output.ProductDTO;
+import com.capgemini.start.api.mapper.ProductMapper;
+import com.capgemini.start.api.resource.ProductResource;
+import com.capgemini.start.domain.entity.Product;
+import com.capgemini.start.domain.service.ProductService;
 
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping(value = "/api/users")
-public class UserResourceImpl implements UserResource{
+@RequestMapping(value = "/api/products")
+public class ProductResourceImpl implements ProductResource{
 	
-	private final UserService service;
+	private final ProductService service;
 	
 	@Autowired
-	private UserMapper mapper;
+	private ProductMapper mapper;
 	
 	@Override
-	public ResponseEntity<UserDTO> findById(Long id) {
-		User user = this.service.findById(id);
-		UserDTO dto = mapper.toDTO(user);
+	public ResponseEntity<ProductDTO> findById(Long id) {
+		Product product = this.service.findById(id);
+		ProductDTO dto = mapper.toDTO(product);
 		return ResponseEntity.ok(dto);
 	}
 
 	@Override
-	public ResponseEntity<List<UserDTO>> findAll() {
+	public ResponseEntity<List<ProductDTO>> findAll() {
 		return ResponseEntity.ok(
 					this.service.findAll()
 					.stream()
-					.map(user -> mapper.toDTO(user))
+					.map(product -> mapper.toDTO(product))
 					.collect(Collectors.toList())
 				);
 	}
 
 	@Override
-	public ResponseEntity<UserDTO> insert(@RequestBody @Valid UserInputDTO user) {
-		User entity = mapper.toEntity(user);
-		User createdEntity = this.service.insert(entity);
+	public ResponseEntity<ProductDTO> insert(@RequestBody @Valid ProductInputDTO product) {
+		Product entity = mapper.toEntity(product);
+		Product createdEntity = this.service.insert(entity);
 		
 		URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
@@ -68,19 +67,20 @@ public class UserResourceImpl implements UserResource{
 	}
 
 	@Override
-	public ResponseEntity<UserDTO> update(Long id, @Valid UserInputDTO user) {
-		User toUpdate = this.service.findById(id);
-		toUpdate.setName(user.getName());
-		toUpdate.setEmail(user.getEmail());
-		toUpdate.setPassword(user.getPassword());
+	public ResponseEntity<ProductDTO> update(Long id, @Valid ProductInputDTO product) {
+		Product toUpdate = this.service.findById(id);
+		toUpdate.setName(product.getName());
+		toUpdate.setDescricao(product.getDescricao());
+		toUpdate.setPrice(product.getPrice());
+		toUpdate.setImgUrl(product.getImgUrl());
 		
-		User updated = this.service.update(toUpdate);
+		Product updated = this.service.update(toUpdate);
 		return ResponseEntity.ok(mapper.toDTO(updated));
 	}
 
 	@Override
 	public ResponseEntity<Void> delete(Long id) {
-		this.service.delete(id);
+		this.service.delete(id);;
 		return ResponseEntity.ok().build();
 	}
 
